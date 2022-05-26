@@ -32,6 +32,7 @@ set(symbols_c_SYMB
 set(DEFINE_COMPILE_FLAGS
     -mcpu=cortex-m3
     -mthumb
+    -mfloat-abi=soft
 
     -fdata-sections
     -ffunction-sections
@@ -123,7 +124,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
 # Linker options
 target_link_options(${EXECUTABLE} PRIVATE
     -T${LINKER_FILE}
-	-mcpu=cortex-m3
+    -mcpu=cortex-m3
     -mthumb
 
     -specs=nano.specs

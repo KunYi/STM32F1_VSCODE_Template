@@ -5,10 +5,10 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Build Project",
-            "command": "cmake --build .",
+            "label": "Build Project -- Debug",
+            "command": "cmake --build . ",
             "options": {
-                "cwd": "${workspaceFolder}/build"
+                "cwd": "${workspaceFolder}/build/Debug"
             },
             "group": {
                 "kind": "build",
@@ -16,7 +16,7 @@
             },
             "problemMatcher": {
                 "base": "$gcc",
-                "fileLocation": ["relative", "${workspaceFolder}/build"]
+                "fileLocation": ["relative", "${workspaceFolder}/build/Debug"]
             }
         },
         {
