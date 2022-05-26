@@ -6,12 +6,18 @@
     "configurations": [
         {
             "cwd": "${workspaceRoot}",
-            "executable": "./build/PLC_S.elf",
+            "executable": "./build/Debug/PLC_S.elf",
             "name": "Debug Microcontroller",
             "request": "launch",
             "type": "cortex-debug",
             "showDevDebugOutput": false,
-            "servertype": "jlink"
+            "servertype": "jlink",
+            "serverpath": "C:/Program Files/SEGGER/JLink/JLinkGDBServerCL.exe",
+            "device": "STM32F103RC",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+            "svdFile": "./Svd/STM32F103.svd",
+            "armToolchainPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2021.10/bin"
         }
     ]
 }
