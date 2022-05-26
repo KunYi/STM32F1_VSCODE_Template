@@ -18,10 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include <stdint.h>
+#include <stdio.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+uint8_t data[10];
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,7 +53,25 @@ DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
-
+const uint8_t plc_programCodeBuf[34000] __attribute__((section(".PLC_PROG"))) = {
+    // FLASH起始地址为PLC信息**************************最前的0X02表示PLC为16K的程序步,密码区域和差数区域****************
+    0x10, 0x00, 0xD8, 0xBA, 0x00, 0x00, 0x00, 0x00,
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+    0xF4, 0x09, 0xFF, 0x0B, 0xF4, 0x01, 0xE7, 0x03,
+    0x64, 0x0E, 0xC7, 0x0E, 0xDC, 0x0E, 0xFF, 0x0E,
+    0x90, 0x01, 0xFE, 0x03, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x0F, 0x00, //结束指令
+    0XFF, 0XFF,
+    0XFF, 0XFF, 0XFF, 0XFF, 0XFF, 0XFF, 0XFF, 0XFF,
+    0XFF, 0XFF, 0XFF, 0XFF, 0XFF, 0XFF, 0XFF, 0XFF,
+    0XFF, 0XFF, 0XFF, 0XFF, 0XFF,
+};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,12 +84,22 @@ static void MX_ADC1_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_DAC_Init(void);
 /* USER CODE BEGIN PFP */
-
+#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+PUTCHAR_PROTOTYPE {
+  if (ch == '\n')
+    HAL_UART_Transmit(&huart1, (uint8_t*)"\r\n", 2, 1000);
+  else
+    HAL_UART_Transmit(&huart1, (uint8_t*)&ch, 1, 1000);
+  return ch;
+}
 /* USER CODE END 0 */
 
 /**
@@ -108,7 +137,11 @@ int main(void)
   MX_ADC2_Init();
   MX_DAC_Init();
   /* USER CODE BEGIN 2 */
-
+  for (uint8_t i = 0; i < 10; i++)
+  {
+    data[i] = plc_programCodeBuf[i];
+  }
+  printf("Hello World\r\n!");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -318,6 +351,7 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 19200;
+  huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -545,4 +579,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
