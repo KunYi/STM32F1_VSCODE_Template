@@ -7,11 +7,13 @@ set(CMAKE_TOOLCHAIN_FILE ${PROJ_DIR}/arm-none-eabi-gcc.cmake)
 
 project(PLC_S)
 
+# "USE_HAL_DRIVER" or "USE_FULL_LL_DRIVER"
+set(HAL_DRIVER_TYPE  "USE_HAL_DRIVER")
+
 set(EXECUTABLE ${PROJECT_NAME}.elf)
 set(LINKER_FILE ${PROJ_DIR}/STM32F103RCTX_FLASH.ld)
 
-message("Build type: "              ${CMAKE_BUILD_TYPE})
-
+message("Build type: "  ${CMAKE_BUILD_TYPE})
 
 #
 # Symbols definition
@@ -19,8 +21,8 @@ message("Build type: "              ${CMAKE_BUILD_TYPE})
 set(symbols_c_SYMB
     "DEBUG"
     "STM32F103xE"
-    # "USE_FULL_LL_DRIVER"
-    "USE_HAL_DRIVER"
+
+    ${HAL_DRIVER_TYPE}
     "HSE_VALUE=8000000"
     "HSE_STARTUP_TIMEOUT=100"
     "LSE_STARTUP_TIMEOUT=5000"
